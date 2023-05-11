@@ -8,7 +8,8 @@ Instalação:
 
     2.1. TCPDF/FPDI
         2.1.1 No diretório moodlewatermark, correr o comando:
-            composer require setasign/tcpdf fpdi
+            composer require setasign/fpdi-tcpdf
+
 
     2.2 ImageImagick
         2.2.1 Em sistemas Debian, correr o comando:

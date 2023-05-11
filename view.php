@@ -19,17 +19,17 @@
 /**
  * Activity view
  *
- * @package    mod_moodleWatermark
- * @copyright 
+ * @package    mod_moodlewatermark
+ * @copyright
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 require('../../config.php');
 
-require_once($CFG->dirroot.'/mod/filewithwatermark/lib.php');
-require_once($CFG->dirroot.'/mod/filewithwatermark/locallib.php');
+require_once($CFG->dirroot.'/mod/moodlewatermark/lib.php');
+require_once($CFG->dirroot.'/mod/moodlewatermark/locallib.php');
 require_once($CFG->libdir.'/completionlib.php');
-require_once($CFG->dirroot.'/mod/filewithwatermark/classes/fileutil.php');
+require_once($CFG->dirroot.'/mod/moodlewatermark/classes/fileutil.php');
 
 //Parametros opcionais
 $id       = optional_param('id', 0, PARAM_INT); //ID do modulo do curso
@@ -39,16 +39,16 @@ $forceview = optional_param('forceview', 0, PARAM_BOOL);
 
 
 if ($r) {
-    if (!$filewithwatermark = $DB->get_record('filewithwatermark', array('id'=>$r))) {
+    if (!$moodlewatermark = $DB->get_record('moodlewatermark', array('id'=>$r))) {
         print_error('invalidaccessparameter');
     }
-    $cm = get_coursemodule_from_instance('filewithwatermark', $filewithwatermark->id, $filewithwatermark->course, false, MUST_EXIST);
+    $cm = get_coursemodule_from_instance('moodlewatermark', $moodlewatermark->id, $moodlewatermark->course, false, MUST_EXIST);
 
 } else {
-    if (!$cm = get_coursemodule_from_id('filewithwatermark', $id)) {
+    if (!$cm = get_coursemodule_from_id('moodlewatermark', $id)) {
         print_error('invalidcoursemodule');
     }
-    $filewithwatermark = $DB->get_record('filewithwatermark', array('id'=>$cm->instance), '*', MUST_EXIST);
+    $moodlewatermark = $DB->get_record('moodlewatermark', array('id'=>$cm->instance), '*', MUST_EXIST);
 }
 
 $course = $DB->get_record('course', array('id'=>$cm->course), '*', MUST_EXIST);
@@ -56,29 +56,29 @@ $course = $DB->get_record('course', array('id'=>$cm->course), '*', MUST_EXIST);
 require_course_login($course, true, $cm);
 
 $context = context_module::instance($cm->id);
-require_capability('mod/filewithwatermark:view', $context);
+require_capability('mod/moodlewatermark:view', $context);
 
 
-filewithwatermark_view($filewithwatermark, $course, $cm, $context);
+moodlewatermark_view($moodlewatermark, $course, $cm, $context);
 
 // Define o url que vai ser demonstrado com o ficheiro
-$PAGE->set_url('/mod/filewithwatermark/view.php', array('id' => $cm->id));
+$PAGE->set_url('/mod/moodlewatermark/view.php', array('id' => $cm->id));
 
 // Requisita os ficheiros ao Moodle API
 $fs = get_file_storage();
-$files = $fs->get_area_files($context->id, 'mod_filewithwatermark', 'content', 0, 'sortorder DESC, id ASC', false);
+$files = $fs->get_area_files($context->id, 'mod_moodlewatermark', 'content', 0, 'sortorder DESC, id ASC', false);
 
 if (count($files) < 1) {
-    filewithwatermark_print_filenotfound($filewithwatermark, $cm, $course);
+    moodlewatermark_print_filenotfound($moodlewatermark, $cm, $course);
     die;
 } else {
     $file = reset($files);
     unset($files);
 }
 
-$filewithwatermark->mainfile = $file->get_filename();
-$displaytype = filewithwatermark_get_final_display_type($filewithwatermark);
-if ($displaytype ==\mod_filewithwatermark\fileutil::$DISPLAY_OPEN || $displaytype ==\mod_filewithwatermark\fileutil::$DISPLAY_DOWNLOAD) {
+$moodlewatermark->mainfile = $file->get_filename();
+$displaytype = moodlewatermark_get_final_display_type($moodlewatermark);
+if ($displaytype ==\mod_moodlewatermark\fileutil::$DISPLAY_OPEN || $displaytype ==\mod_moodlewatermark\fileutil::$DISPLAY_DOWNLOAD) {
     $redirect = true;
 }
 
@@ -89,23 +89,23 @@ if ($redirect && !course_get_format($course)->has_view_page() &&
 }
 
 if ($redirect && !$forceview) {
-    $path = '/'.$context->id.'/mod_filewithwatermark/content/'.$filewithwatermark->revision.$file->get_filepath().$file->get_filename();
+    $path = '/'.$context->id.'/mod_moodlewatermark/content/'.$moodlewatermark->revision.$file->get_filepath().$file->get_filename();
 
-    $fullurl = moodle_url::make_file_url('/pluginfile.php', $path, $displaytype ==\mod_filewithwatermark\fileutil::$DISPLAY_DOWNLOAD);
+    $fullurl = moodle_url::make_file_url('/pluginfile.php', $path, $displaytype ==\mod_moodlewatermark\fileutil::$DISPLAY_DOWNLOAD);
 
     redirect($fullurl);
 }
 
 //Apresenta o ficheiro com o formato escolhido.
 switch ($displaytype) {
-    case \mod_filewithwatermark\fileutil::$DISPLAY_EMBED:
-        filewithwatermark_display_embed($filewithwatermark, $cm, $course, $file);
+    case \mod_moodlewatermark\fileutil::$DISPLAY_EMBED:
+        moodlewatermark_display_embed($moodlewatermark, $cm, $course, $file);
         break;
-    case \mod_filewithwatermark\fileutil::$DISPLAY_FRAME:
-        filewithwatermark_display_frame($filewithwatermark, $cm, $course, $file);
+    case \mod_moodlewatermark\fileutil::$DISPLAY_FRAME:
+        moodlewatermark_display_frame($moodlewatermark, $cm, $course, $file);
         break;
     default:
-        filewithwatermark_print_workaround($filewithwatermark, $cm, $course, $file);
+        moodlewatermark_print_workaround($moodlewatermark, $cm, $course, $file);
         break;
 }
 

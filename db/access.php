@@ -15,9 +15,9 @@
 // along with Moodle.  If not, see <https://www.gnu.org/licenses/>.
 
 /**
- * Filewithwatermark module capability definition
+ * moodlewatermark module capability definition
  *
- * @package    mod_moodleWatermark
+ * @package    mod_moodlewatermark
  * @copyright 
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
@@ -25,7 +25,7 @@
 defined('MOODLE_INTERNAL') || die;
 
 $capabilities = array(
-    'mod/filewithwatermark:view' => array(
+    'mod/moodlewatermark:view' => array(
         'captype' => 'read',
         'contextlevel' => CONTEXT_MODULE,
         'archetypes' => array(
@@ -34,7 +34,7 @@ $capabilities = array(
         )
     ),
 
-    'mod/filewithwatermark:addinstance' => array(
+    'mod/moodlewatermark:addinstance' => array(
         'riskbitmask' => RISK_XSS,
         'captype' => 'write',
         'contextlevel' => CONTEXT_COURSE,

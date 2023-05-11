@@ -17,12 +17,12 @@
 /**
  * The mod_file_with_watermark course module viewed event.
  *
- * @package    mod_moodleWatermark
+ * @package    mod_moodlewatermark
  * @copyright 
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-namespace mod_filewithwatermark\event;
+namespace mod_moodlewatermark\event;
 
 defined('MOODLE_INTERNAL') || die();
 
@@ -34,12 +34,12 @@ class course_module_viewed extends \core\event\course_module_viewed {
      * @return void
      */
     protected function init() {
-        $this->data['objecttable'] = 'filewithwatermark';
+        $this->data['objecttable'] = 'moodlewatermark';
         $this->data['crud'] = 'r';
         $this->data['edulevel'] = self::LEVEL_PARTICIPATING;
     }
 
     public static function get_objectid_mapping() {
-        return array('db' => 'filewithwatermark', 'restore' => 'filewithwatermark');
+        return array('db' => 'moodlewatermark', 'restore' => 'moodlewatermark');
     }
 }

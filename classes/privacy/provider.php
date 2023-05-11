@@ -15,13 +15,13 @@
 // along with Moodle.  If not, see <https://www.gnu.org/licenses/>.
 
 /**
- * Privacy Subsystem implementation for mod_filewithwatermark.
+ * Privacy Subsystem implementation for mod_moodlewatermark.
  *
- * @package    mod_moodleWatermark
+ * @package    mod_moodlewatermark
  * @copyright 
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-namespace mod_filewithwatermark\privacy;
+namespace mod_moodlewatermark\privacy;
 
 defined('MOODLE_INTERNAL') || die();
 

@@ -15,9 +15,9 @@
 // along with Moodle.  If not, see <https://www.gnu.org/licenses/>.
 
 /**
- * Filewithwatermark module version information
+ * moodlewatermark module version information
  *
- * @package    mod_moodleWatermark
+ * @package    mod_moodlewatermark
  * @copyright 
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
@@ -28,5 +28,5 @@ $plugin->version   = 2022031600;       // The current module version (Date: YYYY
 $plugin->requires  = 2020061500;    // Requires this Moodle version
 $plugin->release = 'v1.1';
 $plugin->maturity = MATURITY_BETA;
-$plugin->component = 'mod_filewithwatermark'; // Full name of the plugin (used for diagnostics)
+$plugin->component = 'mod_moodlewatermark'; // Full name of the plugin (used for diagnostics)
 $plugin->cron      = 0;

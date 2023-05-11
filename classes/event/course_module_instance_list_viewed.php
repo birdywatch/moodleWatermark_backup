@@ -15,21 +15,21 @@
 // along with Moodle.  If not, see <https://www.gnu.org/licenses/>.
 
 /**
- * The mod_filewithwatermark instance list viewed event.
+ * The mod_moodlewatermark instance list viewed event.
  *
- * @package    mod_moodleWatermark
+ * @package    mod_moodlewatermark
  * @copyright 
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-namespace mod_filewithwatermark\event;
+namespace mod_moodlewatermark\event;
 
 defined('MOODLE_INTERNAL') || die();
 
 /**
- * The mod_filewithwatermark instance list viewed event class.
+ * The mod_moodlewatermark instance list viewed event class.
  *
- * @package    mod_moodleWatermark
+ * @package    mod_moodlewatermark
  * @since      Moodle 2.7
  * @copyright  2014 Rajesh Taneja <rajesh@moodle.com>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later

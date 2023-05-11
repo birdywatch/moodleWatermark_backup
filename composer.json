@@ -1,5 +1,5 @@
 {
-  "name": "vendor_name/filewithwatermark",
+  "name": "vendor_name/moodlewatermark",
   "description": "This plugin add a watermark in a PDF file",
   "minimum-stability": "stable",
   "license": "GPL-3.0-or-later",

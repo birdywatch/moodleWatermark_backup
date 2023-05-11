@@ -17,7 +17,7 @@
 /**
  * List of all resources with watermark in course
  *
- * @package    mod_moodleWatermark
+ * @package    mod_moodlewatermark
  * @copyright
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
@@ -34,27 +34,27 @@ $PAGE->set_pagelayout('incourse');
 $params = array(
     'context' => context_course::instance($course->id)
 );
-$event = \mod_filewithwatermark\event\course_module_instance_list_viewed::create($params);
+$event = \mod_moodlewatermark\event\course_module_instance_list_viewed::create($params);
 $event->add_record_snapshot('course', $course);
 $event->trigger();
 
 //Dados do módulo
-$strfilewithwatermark     = get_string('modulename', 'filewithwatermark');
-$strfilewithwatermarks    = get_string('modulenameplural', 'filewithwatermark');
+$strmoodlewatermark     = get_string('modulename', 'moodlewatermark');
+$strmoodlewatermarks    = get_string('modulenameplural', 'moodlewatermark');
 $strsectionname  = get_string('sectionname', 'format_'.$course->format);
 $strname         = get_string('name');
 $strintro        = get_string('moduleintro');
 $strlastmodified = get_string('lastmodified');
 
-$PAGE->set_url('/mod/filewithwatermark/index.php', array('id' => $course->id));
-$PAGE->set_title($course->shortname.': '.$strfilewithwatermarks);
+$PAGE->set_url('/mod/moodlewatermark/index.php', array('id' => $course->id));
+$PAGE->set_title($course->shortname.': '.$strmoodlewatermarks);
 $PAGE->set_heading($course->fullname);
-$PAGE->navbar->add($strfilewithwatermarks);
+$PAGE->navbar->add($strmoodlewatermarks);
 echo $OUTPUT->header();
-echo $OUTPUT->heading($strfilewithwatermarks);
+echo $OUTPUT->heading($strmoodlewatermarks);
 
-if (!$filewithwatermarks = get_all_instances_in_course('filewithwatermark', $course)) {
-    notice(get_string('thereareno', 'moodle', $strfilewithwatermarks), "$CFG->wwwroot/course/view.php?id=$course->id");
+if (!$moodlewatermarks = get_all_instances_in_course('moodlewatermark', $course)) {
+    notice(get_string('thereareno', 'moodle', $strmoodlewatermarks), "$CFG->wwwroot/course/view.php?id=$course->id");
     exit;
 }
 
@@ -73,30 +73,30 @@ if ($usesections) {
 
 $modinfo = get_fast_modinfo($course);
 $currentsection = '';
-foreach ($filewithwatermarks as $filewithwatermark) {
-    $cm = $modinfo->cms[$filewithwatermark->coursemodule];
+foreach ($moodlewatermarks as $moodlewatermark) {
+    $cm = $modinfo->cms[$moodlewatermark->coursemodule];
     if ($usesections) {
         $printsection = '';
-        if ($filewithwatermark->section !== $currentsection) {
-            if ($filewithwatermark->section) {
-                $printsection = get_section_name($course, $filewithwatermark->section);
+        if ($moodlewatermark->section !== $currentsection) {
+            if ($moodlewatermark->section) {
+                $printsection = get_section_name($course, $moodlewatermark->section);
             }
             if ($currentsection !== '') {
                 $table->data[] = 'hr';
             }
-            $currentsection = $filewithwatermark->section;
+            $currentsection = $moodlewatermark->section;
         }
     } else {
-        $printsection = '<span class="smallinfo">'.userdate($filewithwatermark->timemodified)."</span>";
+        $printsection = '<span class="smallinfo">'.userdate($moodlewatermark->timemodified)."</span>";
     }
 
     $extra = empty($cm->extra) ? '' : $cm->extra;
 
-    $class = $filewithwatermark->visible ? '' : 'class="dimmed"'; // hidden modules are dimmed
+    $class = $moodlewatermark->visible ? '' : 'class="dimmed"'; // hidden modules are dimmed
     $table->data[] = array (
         $printsection,
-        "<a $class $extra href=\"view.php?id=$cm->id\">".format_string($filewithwatermark->name)."</a>",
-        format_module_intro('filewithwatermark', $filewithwatermark, $cm->id));
+        "<a $class $extra href=\"view.php?id=$cm->id\">".format_string($moodlewatermark->name)."</a>",
+        format_module_intro('moodlewatermark', $moodlewatermark, $cm->id));
 }
 
 echo html_writer::table($table);

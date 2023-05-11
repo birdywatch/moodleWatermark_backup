@@ -16,9 +16,9 @@
 // along with Moodle.  If not, see <https://www.gnu.org/licenses/>.
 
 /**
- * Private Filewithwatermark module utility functions
+ * Private moodlewatermark module utility functions
  *
- * @package    mod_moodleWatermark
+ * @package    mod_moodlewatermark
  * @copyright
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
@@ -27,17 +27,17 @@ defined('MOODLE_INTERNAL') || die;
 
 require_once("$CFG->libdir/filelib.php");
 require_once("$CFG->libdir/resourcelib.php");
-require_once("$CFG->dirroot/mod/filewithwatermark/lib.php");
-require_once($CFG->dirroot . '/mod/filewithwatermark/classes/fileutil.php');
-require_once($CFG->dirroot . '/mod/filewithwatermark/classes/pdfextractor.php');
-require_once($CFG->dirroot . '/mod/filewithwatermark/vendor/autoload.php');
+require_once("$CFG->dirroot/mod/moodlewatermark/lib.php");
+require_once($CFG->dirroot . '/mod/moodlewatermark/classes/fileutil.php');
+require_once($CFG->dirroot . '/mod/moodlewatermark/classes/pdfextractor.php');
+require_once($CFG->dirroot . '/mod/moodlewatermark/vendor/autoload.php');
 
 /**
  * Se forem submetidos multiplos ficheiros, define o ficheiro principal
  * Torna o contéudo dos ficheiros não selecionavel, atráves da função save_gs()
  * @param $data
  */
-function filewithwatermark_set_mainfile($data)
+function moodlewatermark_set_mainfile($data)
 {
     global $DB, $USER;
     $fs = get_file_storage();
@@ -46,12 +46,12 @@ function filewithwatermark_set_mainfile($data)
     $context = context_module::instance($cmid);
     if ($draftitemid) {
         $options = array('subdirs' => true, 'embed' => false);
-        if ($data->display == \mod_filewithwatermark\fileutil::$DISPLAY_EMBED) {
+        if ($data->display == \mod_moodlewatermark\fileutil::$DISPLAY_EMBED) {
             $options['embed'] = true;
         }
-        file_save_draft_area_files($draftitemid, $context->id, 'mod_filewithwatermark', 'content', 0, $options);
+        file_save_draft_area_files($draftitemid, $context->id, 'mod_moodlewatermark', 'content', 0, $options);
     }
-    $files = $fs->get_area_files($context->id, 'mod_filewithwatermark', 'content', 0, 'sortorder', false);
+    $files = $fs->get_area_files($context->id, 'mod_moodlewatermark', 'content', 0, 'sortorder', false);
 
     foreach ($files as $file) {
         $contents = $file->get_content();
@@ -92,7 +92,7 @@ function filewithwatermark_set_mainfile($data)
     if (count($files) == 1) {
         // only one file attached, set it as main file automatically
         $file = reset($files);
-        file_set_sortorder($context->id, 'mod_filewithwatermark', 'content', 0, $file->get_filepath(), $file->get_filename(), 1);
+        file_set_sortorder($context->id, 'mod_moodlewatermark', 'content', 0, $file->get_filepath(), $file->get_filename(), 1);
     }
 
 }
@@ -116,15 +116,15 @@ function save_gs($input, $output)
 /**
  * Imprime mensagem de erro caso o ficheiro não seja encontrado.
  */
-function filewithwatermark_print_filenotfound($filewithwatermark, $cm, $course)
+function moodlewatermark_print_filenotfound($moodlewatermark, $cm, $course)
 {
     global $DB, $OUTPUT;
 
-    filewithwatermark_print_header($filewithwatermark, $cm, $course);
-    filewithwatermark_print_heading($filewithwatermark, $cm, $course);
-    filewithwatermark_print_intro($filewithwatermark, $cm, $course);
+    moodlewatermark_print_header($moodlewatermark, $cm, $course);
+    moodlewatermark_print_heading($moodlewatermark, $cm, $course);
+    moodlewatermark_print_intro($moodlewatermark, $cm, $course);
 
-    echo $OUTPUT->notification(get_string('filenotfound', 'filewithwatermark'));
+    echo $OUTPUT->notification(get_string('filenotfound', 'moodlewatermark'));
 
     echo $OUTPUT->footer();
     die;
@@ -133,23 +133,23 @@ function filewithwatermark_print_filenotfound($filewithwatermark, $cm, $course)
 /**
  * Imprime a introdução da instancia do módulo
  */
-function filewithwatermark_print_intro($filewithwatermark, $cm, $course, $ignoresettings = false)
+function moodlewatermark_print_intro($moodlewatermark, $cm, $course, $ignoresettings = false)
 {
     global $OUTPUT;
 
-    $options = empty($filewithwatermark->displayoptions) ? array() : unserialize($filewithwatermark->displayoptions);
+    $options = empty($moodlewatermark->displayoptions) ? array() : unserialize($moodlewatermark->displayoptions);
 
-    $extraintro = filewithwatermark_get_optional_details($filewithwatermark, $cm);
+    $extraintro = moodlewatermark_get_optional_details($moodlewatermark, $cm);
     if ($extraintro) {
         $extraintro = html_writer::tag('p', $extraintro, array('class' => 'resourcedetails'));
     }
 
     if ($ignoresettings || !empty($options['printintro']) || $extraintro) {
-        $gotintro = trim(strip_tags($filewithwatermark->intro));
+        $gotintro = trim(strip_tags($moodlewatermark->intro));
         if ($gotintro || $extraintro) {
             echo $OUTPUT->box_start('mod_introbox', 'resourceintro');
             if ($gotintro) {
-                echo format_module_intro('filewithwatermark', $filewithwatermark, $cm->id);
+                echo format_module_intro('moodlewatermark', $moodlewatermark, $cm->id);
             }
             echo $extraintro;
             echo $OUTPUT->box_end();
@@ -160,18 +160,18 @@ function filewithwatermark_print_intro($filewithwatermark, $cm, $course, $ignore
 /**
  * Imprime o header da instancia do módulo
  *
- * @param object $filewithwatermark
+ * @param object $moodlewatermark
  * @param object $cm
  * @param object $course
  * @return void
  */
-function filewithwatermark_print_header($filewithwatermark, $cm, $course)
+function moodlewatermark_print_header($moodlewatermark, $cm, $course)
 {
     global $PAGE, $OUTPUT;
 
-    $PAGE->set_title($course->shortname . ': ' . $filewithwatermark->name);
+    $PAGE->set_title($course->shortname . ': ' . $moodlewatermark->name);
     $PAGE->set_heading($course->fullname);
-    $PAGE->set_activity_record($filewithwatermark);
+    $PAGE->set_activity_record($moodlewatermark);
     echo $OUTPUT->header();
 }
 
@@ -179,66 +179,66 @@ function filewithwatermark_print_header($filewithwatermark, $cm, $course)
  * Imprime o titulo da instancia do módulo
  *
  */
-function filewithwatermark_print_heading($filewithwatermark, $cm, $course, $notused = false)
+function moodlewatermark_print_heading($moodlewatermark, $cm, $course, $notused = false)
 {
     global $OUTPUT;
-    echo $OUTPUT->heading(format_string($filewithwatermark->name), 2);
+    echo $OUTPUT->heading(format_string($moodlewatermark->name), 2);
 }
 
 /**
  * Decide o melhor formato de apresentação
  */
-function filewithwatermark_get_final_display_type($filewithwatermark)
+function moodlewatermark_get_final_display_type($moodlewatermark)
 {
     global $CFG, $PAGE;
 
-    if ($filewithwatermark->display != \mod_filewithwatermark\fileutil::$DISPLAY_AUTO) {
-        return $filewithwatermark->display;
+    if ($moodlewatermark->display != \mod_moodlewatermark\fileutil::$DISPLAY_AUTO) {
+        return $moodlewatermark->display;
     }
 
-    if (empty($filewithwatermark->mainfile)) {
-        return \mod_filewithwatermark\fileutil::$DISPLAY_DOWNLOAD;
+    if (empty($moodlewatermark->mainfile)) {
+        return \mod_moodlewatermark\fileutil::$DISPLAY_DOWNLOAD;
     } else {
-        $mimetype = mimeinfo('type', $filewithwatermark->mainfile);
+        $mimetype = mimeinfo('type', $moodlewatermark->mainfile);
     }
 
     if (file_mimetype_in_typegroup($mimetype, 'archive')) {
-        return \mod_filewithwatermark\fileutil::$DISPLAY_DOWNLOAD;
+        return \mod_moodlewatermark\fileutil::$DISPLAY_DOWNLOAD;
     }
     if (file_mimetype_in_typegroup($mimetype, array('web_image', '.htm', 'web_video', 'web_audio'))) {
-        return \mod_filewithwatermark\fileutil::$DISPLAY_EMBED;
+        return \mod_moodlewatermark\fileutil::$DISPLAY_EMBED;
     }
 
-    return \mod_filewithwatermark\fileutil::$DISPLAY_OPEN;
+    return \mod_moodlewatermark\fileutil::$DISPLAY_OPEN;
 }
 
 /**
  * Apresenta o ficheiro embutido
  */
-function filewithwatermark_display_embed($filewithwatermark, $cm, $course, $file)
+function moodlewatermark_display_embed($moodlewatermark, $cm, $course, $file)
 {
     global $CFG, $PAGE, $OUTPUT;
 
-    $clicktoopen = filewithwatermark_get_clicktoopen($file, $filewithwatermark->revision);
+    $clicktoopen = moodlewatermark_get_clicktoopen($file, $moodlewatermark->revision);
 
     $context = context_module::instance($cm->id);
     $moodleurl = moodle_url::make_pluginfile_url(
         $context->id,
-        'mod_filewithwatermark',
-        'content', $filewithwatermark->revision,
+        'mod_moodlewatermark',
+        'content', $moodlewatermark->revision,
         $file->get_filepath(), $file->get_filename()
     );
 
-    $title = $filewithwatermark->name;
+    $title = $moodlewatermark->name;
 
     $code = resourcelib_embed_pdf($moodleurl->out(), $title, $clicktoopen);
 
-    filewithwatermark_print_header($filewithwatermark, $cm, $course);
-    filewithwatermark_print_heading($filewithwatermark, $cm, $course);
+    moodlewatermark_print_header($moodlewatermark, $cm, $course);
+    moodlewatermark_print_heading($moodlewatermark, $cm, $course);
 
     echo $code;
 
-    filewithwatermark_print_intro($filewithwatermark, $cm, $course);
+    moodlewatermark_print_intro($moodlewatermark, $cm, $course);
 
     echo $OUTPUT->footer();
     die;
@@ -249,7 +249,7 @@ function filewithwatermark_display_embed($filewithwatermark, $cm, $course, $file
  *Apresenta a moldura do ficheiro
  *
  */
-function filewithwatermark_display_frame($filewithwatermark, $cm, $course, $file)
+function moodlewatermark_display_frame($moodlewatermark, $cm, $course, $file)
 {
     global $PAGE, $OUTPUT, $CFG;
 
@@ -257,22 +257,22 @@ function filewithwatermark_display_frame($filewithwatermark, $cm, $course, $file
 
     if ($frame === 'top') {
         $PAGE->set_pagelayout('frametop');
-        filewithwatermark_print_header($filewithwatermark, $cm, $course);
-        filewithwatermark_print_heading($filewithwatermark, $cm, $course);
-        filewithwatermark_print_intro($filewithwatermark, $cm, $course);
+        moodlewatermark_print_header($moodlewatermark, $cm, $course);
+        moodlewatermark_print_heading($moodlewatermark, $cm, $course);
+        moodlewatermark_print_intro($moodlewatermark, $cm, $course);
         echo $OUTPUT->footer();
         die;
 
     } else {
-        $config = get_config('filewithwatermark');
+        $config = get_config('moodlewatermark');
         $context = context_module::instance($cm->id);
-        $path = '/' . $context->id . '/mod_filewithwatermark/content/' . $filewithwatermark->revision . $file->get_filepath() . $file->get_filename();
+        $path = '/' . $context->id . '/mod_moodlewatermark/content/' . $moodlewatermark->revision . $file->get_filepath() . $file->get_filename();
         $fileurl = file_encode_url($CFG->wwwroot . '/pluginfile.php', $path, false);
-        $navurl = "$CFG->wwwroot/mod/filewithwatermark/view.php?id=$cm->id&amp;frameset=top";
-        $title = strip_tags(format_string($course->shortname . ': ' . $filewithwatermark->name));
+        $navurl = "$CFG->wwwroot/mod/moodlewatermark/view.php?id=$cm->id&amp;frameset=top";
+        $title = strip_tags(format_string($course->shortname . ': ' . $moodlewatermark->name));
         $framesize = $config->framesize;
-        $contentframetitle = s(format_string($filewithwatermark->name));
-        $modulename = s(get_string('modulename', 'filewithwatermark'));
+        $contentframetitle = s(format_string($moodlewatermark->name));
+        $modulename = s(get_string('modulename', 'moodlewatermark'));
         $dir = get_string('thisdirection', 'langconfig');
 
         $file = <<<EOF
@@ -298,16 +298,16 @@ EOF;
 /**
  * Obtém detalhes adicionais da instância, caso estejam definidos nas definições da instancia
  */
-function filewithwatermark_get_optional_details($filewithwatermark, $cm)
+function moodlewatermark_get_optional_details($moodlewatermark, $cm)
 {
     global $DB;
 
     $details = '';
 
-    $options = empty($filewithwatermark->displayoptions) ? array() : @unserialize($filewithwatermark->displayoptions);
+    $options = empty($moodlewatermark->displayoptions) ? array() : @unserialize($moodlewatermark->displayoptions);
     if (!empty($options['showsize']) || !empty($options['showtype']) || !empty($options['showdate'])) {
         if (!array_key_exists('filedetails', $options)) {
-            $filedetails = filewithwatermark_get_file_details($filewithwatermark, $cm);
+            $filedetails = moodlewatermark_get_file_details($moodlewatermark, $cm);
         } else {
             $filedetails = $options['filedetails'];
         }
@@ -332,13 +332,13 @@ function filewithwatermark_get_optional_details($filewithwatermark, $cm)
         }
         if (!empty($options['showdate']) && (!empty($filedetails['modifieddate']) || !empty($filedetails['uploadeddate']))) {
             if (!empty($filedetails['modifieddate'])) {
-                $date = get_string('modifieddate', 'mod_filewithwatermark', userdate(
+                $date = get_string('modifieddate', 'mod_moodlewatermark', userdate(
                     $filedetails['modifieddate'],
                     get_string('strftimedatetimeshort', 'langconfig')
                 )
                 );
             } else if (!empty($filedetails['uploadeddate'])) {
-                $date = get_string('uploadeddate', 'mod_filewithwatermark', userdate(
+                $date = get_string('uploadeddate', 'mod_moodlewatermark', userdate(
                     $filedetails['uploadeddate'],
                     get_string('strftimedatetimeshort', 'langconfig')
                 )
@@ -350,8 +350,8 @@ function filewithwatermark_get_optional_details($filewithwatermark, $cm)
 
         if ($infodisplayed > 1) {
             $details = get_string(
-                "filewithwatermarkdetails_{$langstring}",
-                'filewithwatermark',
+                "moodlewatermarkdetails_{$langstring}",
+                'moodlewatermark',
                 (object) array('size' => $size, 'type' => $type, 'date' => $date)
             );
         } else {
@@ -365,15 +365,15 @@ function filewithwatermark_get_optional_details($filewithwatermark, $cm)
 /**
  * Cria um link que o utilizador tem de premir para abrir o ficheiro
  */
-function filewithwatermark_get_clicktoopen($file, $revision, $extra = '')
+function moodlewatermark_get_clicktoopen($file, $revision, $extra = '')
 {
     global $CFG;
 
     $filename = $file->get_filename();
-    $path = '/' . $file->get_contextid() . '/mod_filewithwatermark/content/' . $revision . $file->get_filepath() . $file->get_filename();
+    $path = '/' . $file->get_contextid() . '/mod_moodlewatermark/content/' . $revision . $file->get_filepath() . $file->get_filename();
     $fullurl = file_encode_url($CFG->wwwroot . '/pluginfile.php', $path, false);
 
-    $string = get_string('clicktoopen2', 'filewithwatermark', "<a href=\"$fullurl\" $extra>$filename</a>");
+    $string = get_string('clicktoopen2', 'moodlewatermark', "<a href=\"$fullurl\" $extra>$filename</a>");
 
     return $string;
 }
@@ -381,40 +381,40 @@ function filewithwatermark_get_clicktoopen($file, $revision, $extra = '')
 /**
  * Imprime a informação da instância caso JS esteja indisponivel
  */
-function filewithwatermark_print_workaround($filewithwatermark, $cm, $course, $file)
+function moodlewatermark_print_workaround($moodlewatermark, $cm, $course, $file)
 {
     global $CFG, $OUTPUT;
 
-    filewithwatermark_print_header($filewithwatermark, $cm, $course);
-    filewithwatermark_print_heading($filewithwatermark, $cm, $course, true);
-    filewithwatermark_print_intro($filewithwatermark, $cm, $course, true);
+    moodlewatermark_print_header($moodlewatermark, $cm, $course);
+    moodlewatermark_print_heading($moodlewatermark, $cm, $course, true);
+    moodlewatermark_print_intro($moodlewatermark, $cm, $course, true);
 
-    $filewithwatermark->mainfile = $file->get_filename();
+    $moodlewatermark->mainfile = $file->get_filename();
     echo '<div class="resourceworkaround">';
-    switch (filewithwatermark_get_final_display_type($filewithwatermark)) {
-        case \mod_filewithwatermark\fileutil::$DISPLAY_POPUP:
-            $path = '/' . $file->get_contextid() . '/mod_filewithwatermark/content/' . $filewithwatermark->revision . $file->get_filepath() . $file->get_filename();
+    switch (moodlewatermark_get_final_display_type($moodlewatermark)) {
+        case \mod_moodlewatermark\fileutil::$DISPLAY_POPUP:
+            $path = '/' . $file->get_contextid() . '/mod_moodlewatermark/content/' . $moodlewatermark->revision . $file->get_filepath() . $file->get_filename();
             $fullurl = file_encode_url($CFG->wwwroot . '/pluginfile.php', $path, false);
-            $options = empty($resource->displayoptions) ? array() : unserialize($filewithwatermark->displayoptions);
+            $options = empty($resource->displayoptions) ? array() : unserialize($moodlewatermark->displayoptions);
             $width = empty($options['popupwidth']) ? 620 : $options['popupwidth'];
             $height = empty($options['popupheight']) ? 450 : $options['popupheight'];
             $wh = "width=$width,height=$height,toolbar=no,location=no,menubar=no,copyhistory=no,status=no,directories=no,scrollbars=yes,resizable=yes";
             $extra = "onclick=\"window.open('$fullurl', '', '$wh'); return false;\"";
-            echo filewithwatermark_get_clicktoopen($file, $filewithwatermark->revision, $extra);
+            echo moodlewatermark_get_clicktoopen($file, $moodlewatermark->revision, $extra);
             break;
 
-        case \mod_filewithwatermark\fileutil::$DISPLAY_NEW:
+        case \mod_moodlewatermark\fileutil::$DISPLAY_NEW:
             $extra = 'onclick="this.target=\'_blank\'"';
-            echo filewithwatermark_get_clicktoopen($file, $filewithwatermark->revision, $extra);
+            echo moodlewatermark_get_clicktoopen($file, $moodlewatermark->revision, $extra);
             break;
 
-        case \mod_filewithwatermark\fileutil::$DISPLAY_DOWNLOAD:
-            echo filewithwatermark_get_clicktodownload($file, $filewithwatermark->revision);
+        case \mod_moodlewatermark\fileutil::$DISPLAY_DOWNLOAD:
+            echo moodlewatermark_get_clicktodownload($file, $moodlewatermark->revision);
             break;
 
-        case \mod_filewithwatermark\fileutil::$DISPLAY_OPEN:
+        case \mod_moodlewatermark\fileutil::$DISPLAY_OPEN:
         default:
-            echo filewithwatermark_get_clicktoopen($file, $filewithwatermark->revision);
+            echo moodlewatermark_get_clicktoopen($file, $moodlewatermark->revision);
             break;
     }
     echo '</div>';
@@ -426,15 +426,15 @@ function filewithwatermark_print_workaround($filewithwatermark, $cm, $course, $f
 /**
  * Cria um link que o utilizador tem de premir para descarregar o ficheiro
  */
-function filewithwatermark_get_clicktodownload($file, $revision)
+function moodlewatermark_get_clicktodownload($file, $revision)
 {
     global $CFG;
 
     $filename = $file->get_filename();
-    $path = '/' . $file->get_contextid() . '/mod_filewithwatermark/content/' . $revision . $file->get_filepath() . $file->get_filename();
+    $path = '/' . $file->get_contextid() . '/mod_moodlewatermark/content/' . $revision . $file->get_filepath() . $file->get_filename();
     $fullurl = file_encode_url($CFG->wwwroot . '/pluginfile.php', $path, true);
 
-    $string = get_string('clicktodownload', 'filewithwatermark', "<a href=\"$fullurl\">$filename</a>");
+    $string = get_string('clicktodownload', 'moodlewatermark', "<a href=\"$fullurl\">$filename</a>");
 
     return $string;
 }
@@ -442,14 +442,14 @@ function filewithwatermark_get_clicktodownload($file, $revision)
 /**
  * Obtem detalhes do ficheiro
  */
-function filewithwatermark_get_file_details($filewithwatermark, $cm)
+function moodlewatermark_get_file_details($moodlewatermark, $cm)
 {
-    $options = empty($filewithwatermark->displayoptions) ? array() : @unserialize($filewithwatermark->displayoptions);
+    $options = empty($moodlewatermark->displayoptions) ? array() : @unserialize($moodlewatermark->displayoptions);
     $filedetails = array();
     if (!empty($options['showsize']) || !empty($options['showtype']) || !empty($options['showdate'])) {
         $context = context_module::instance($cm->id);
         $fs = get_file_storage();
-        $files = $fs->get_area_files($context->id, 'mod_filewithwatermark', 'content', 0, 'sortorder DESC, id ASC', false);
+        $files = $fs->get_area_files($context->id, 'mod_moodlewatermark', 'content', 0, 'sortorder DESC, id ASC', false);
         $mainfile = $files ? reset($files) : null;
         if (!empty($options['showsize'])) {
             $filedetails['size'] = 0;
@@ -493,14 +493,14 @@ function filewithwatermark_get_file_details($filewithwatermark, $cm)
 /**
  * Obtém dados do utilizador a partir do ficheiro
  */
-function filewithwatermark_get_file_userdata($file)
+function moodlewatermark_get_file_userdata($file)
 {
 
-    $filepath = filewithwatermark_create_tempdir();
+    $filepath = moodlewatermark_create_tempdir();
 
-    $filename = filewithwatermark_generate_filename($file, $filepath);
+    $filename = moodlewatermark_generate_filename($file, $filepath);
 
-    $pdf_editor = filewithwatermark_create_watermarkedfile($file, $filepath, $filename);
+    $pdf_editor = moodlewatermark_create_watermarkedfile($file, $filepath, $filename);
 
     $pdf_extractor = new pdfextractor();
 

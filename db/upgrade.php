@@ -15,25 +15,25 @@
 // along with Moodle.  If not, see <https://www.gnu.org/licenses/>.
 
 /**
- * @package    mod_moodleWatermark
+ * @package    mod_moodlewatermark
  * @copyright 
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 defined('MOODLE_INTERNAL') || die;
 
-function xmldb_filewithwatermark_upgrade($oldversion) {
+function xmldb_moodlewatermark_upgrade($oldversion) {
     global $CFG, $DB;
 
     $dbman = $DB->get_manager();
 
     if ($oldversion < 2022031600) {
-        $table = new xmldb_table('filewithwatermark_old');
+        $table = new xmldb_table('moodlewatermark_old');
         if ($dbman->table_exists($table)) {
             $dbman->drop_table($table);
         }
 
-        $table = new xmldb_table('filewithwatermark');
+        $table = new xmldb_table('moodlewatermark');
 
         $field = new xmldb_field('tobemigrated', XMLDB_TYPE_INTEGER, '1', null, null, null, '0',
             'legacyfiles');
@@ -42,7 +42,7 @@ function xmldb_filewithwatermark_upgrade($oldversion) {
             $dbman->drop_field($table, $field);
         }
 
-        upgrade_mod_savepoint(true, 2022031600, 'filewithwatermark');
+        upgrade_mod_savepoint(true, 2022031600, 'moodlewatermark');
 
     }
 

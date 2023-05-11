@@ -15,19 +15,19 @@
 // along with Moodle.  If not, see <https://www.gnu.org/licenses/>.
 
 /**
- * The mod_filewithwatermark PDF text extractor class.
+ * The mod_moodlewatermark PDF text extractor class.
  *
- * @package    mod_moodleWatermark
+ * @package    mod_moodlewatermark
  * @copyright 
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-namespace mod_filewithwatermark;
+namespace mod_moodlewatermark;
 
 /**
  * Classe responsável por extrair conteudo de ficheiros .pdf
  *
- * @package    mod_moodleWatermark
+ * @package    mod_moodlewatermark
  * @copyright 
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */

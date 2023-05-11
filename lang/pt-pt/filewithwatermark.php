@@ -15,9 +15,9 @@
 // along with Moodle.  If not, see <https://www.gnu.org/licenses/>.
 
 /**
- * Strings for component 'filewithwatermark', language 'pt_t'
+ * Strings for component 'moodlewatermark', language 'pt_t'
  *
- * @package    mod_moodleWatermark
+ * @package    mod_moodlewatermark
  * @copyright 
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
@@ -75,9 +75,9 @@ $string['showtype_help'] = 'Exibe o tipo do ficheiro, como \'PDF \', ao lado dos
 Se houver vários ficheiros neste recurso, o tipo de ficheiro inicial será exibido.';
 $string['uploadeddate'] = 'Carregado {$a}';
 $string['versionnotallowed'] = 'O PDF está em uma versão maior que 1.4. Versões compatíveis: 1.0, 1.1, 1.2, 1.3, 1.4. Recomendamos o uso da ferramenta <a href="https://docupub.com/pdfconvert">Docupub</a> para alteração da versão.';
-$string['filewithwatermark:addinstance'] = 'Adicionar novo ficheiro com marca d\'água';
-$string['filewithwatermarkdetails_sizedate'] = '{$a->size} {$a->date}';
-$string['filewithwatermarkdetails_sizetype'] = '{$a->size} {$a->type}';
-$string['filewithwatermarkdetails_sizetypedate'] = '{$a->size} {$a->type} {$a->date}';
-$string['filewithwatermarkdetails_typedate'] = '{$a->type} {$a->date}';
-$string['filewithwatermark:view'] = 'Visualizar ficheiro com marca d\'água';
+$string['moodlewatermark:addinstance'] = 'Adicionar novo ficheiro com marca d\'água';
+$string['moodlewatermarkdetails_sizedate'] = '{$a->size} {$a->date}';
+$string['moodlewatermarkdetails_sizetype'] = '{$a->size} {$a->type}';
+$string['moodlewatermarkdetails_sizetypedate'] = '{$a->size} {$a->type} {$a->date}';
+$string['moodlewatermarkdetails_typedate'] = '{$a->type} {$a->date}';
+$string['moodlewatermark:view'] = 'Visualizar ficheiro com marca d\'água';

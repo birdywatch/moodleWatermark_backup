@@ -15,14 +15,14 @@
 // along with Moodle.  If not, see <https://www.gnu.org/licenses/>.
 
 /**
- * The mod_filewithwatermark others file utilities.
+ * The mod_moodlewatermark others file utilities.
  *
- * @package    mod_moodleWatermark
+ * @package    mod_moodlewatermark
  * @copyright 
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-namespace mod_filewithwatermark;
+namespace mod_moodlewatermark;
 
 class fileutil
 {

@@ -15,9 +15,9 @@
 // along with Moodle.  If not, see <https://www.gnu.org/licenses/>.
 
 /**
- * Strings for component 'filewithwatermark', language 'pt_br'
+ * Strings for component 'moodlewatermark', language 'pt_br'
  *
- * @package    mod_moodleWatermark
+ * @package    mod_moodlewatermark
  * @copyright 
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
@@ -75,9 +75,9 @@ If there are multiple files in this resource, the start file type is displayed.
 If the file type is not known to the system, it will not display.';
 $string['uploadeddate'] = 'Uploaded {$a}';
 $string['versionnotallowed'] = 'Your PDF is in a version greater than 1.4. Compatible versions: 1.0, 1.1, 1.2, 1.3, 1.4. We recommend using the <a href="https://docupub.com/pdfconvert">Docupub</a> paratool to change the version.';
-$string['filewithwatermark:addinstance'] = 'Add a new file with watermark';
-$string['filewithwatermarkdetails_sizedate'] = '{$a->size} {$a->date}';
-$string['filewithwatermarkdetails_sizetype'] = '{$a->size} {$a->type}';
-$string['filewithwatermarkdetails_sizetypedate'] = '{$a->size} {$a->type} {$a->date}';
-$string['filewithwatermarkdetails_typedate'] = '{$a->type} {$a->date}';
-$string['filewithwatermark:view'] = 'View file with watermark';
+$string['moodlewatermark:addinstance'] = 'Add a new file with watermark';
+$string['moodlewatermarkdetails_sizedate'] = '{$a->size} {$a->date}';
+$string['moodlewatermarkdetails_sizetype'] = '{$a->size} {$a->type}';
+$string['moodlewatermarkdetails_sizetypedate'] = '{$a->size} {$a->type} {$a->date}';
+$string['moodlewatermarkdetails_typedate'] = '{$a->type} {$a->date}';
+$string['moodlewatermark:view'] = 'View file with watermark';

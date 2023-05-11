@@ -27,7 +27,6 @@ require_once($CFG->dirroot . '/mod/moodlewatermark/classes/fileutil.php');
 require_once($CFG->dirroot . '/config.php');
 require_once($CFG->libdir . '/datalib.php');
 require_once($CFG->dirroot . '/lib/filelib.php');
-require_once($CFG->dirroot . '/vendor/autoload.php');
 
 use DateTime;
 use DateTimeZone;
@@ -318,7 +317,7 @@ function addwatermark($path)
     }
 
     imagefilter($watermark, IMG_FILTER_COLORIZE, 0, 0, 0, 127 * 0.70);
-    $watermarkPath = '/var/www/moodle/watermarkedfiles/watermarked' . md5(uniqid(mt_rand(), true)) . '.png';
+    $watermarkPath = '/var/www/moodle/course/watermarked' . md5(uniqid(mt_rand(), true)) . '.png';
     imagepng($watermark, $watermarkPath);
 
     $watermark = imagecreatefrompng($watermarkPath);

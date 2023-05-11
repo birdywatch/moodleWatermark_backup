@@ -20,15 +20,13 @@ require_once($CFG->dirroot . '/course/moodleform_mod.php');
 require_once($CFG->dirroot . '/mod/moodlewatermark/locallib.php');
 require_once($CFG->dirroot . '/mod/moodlewatermark/classes/fileutil.php');
 require_once($CFG->dirroot . '/blocks/moodleblock.class.php');
-require_once($CFG->dirroot . '/blocks/upload/block_upload.php');
-require_once($CFG->dirroot . '/lib/form/watermarkmanager.php');
 use mod_moodlewatermark\fileutil;
 
 /**
  * Definição do formulário para o módulo
  *
  * @package    mod_moodlewatermark
- * @copyright 
+ * @copyright
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 

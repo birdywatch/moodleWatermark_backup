@@ -58,12 +58,13 @@ function moodlewatermark_set_mainfile($data)
         $fs = get_file_storage();
         $filename = md5(uniqid(mt_rand(), true)) . '.pdf';
         $handle = fopen($filename, 'w');
-        fwrite($handle, $contents);
+        fwrite($handle, $contents);file:///home/marco/moodle/mod/filewithwatermark/locallib.php
+
         fclose($handle);
         $contextid = $context->id;
         $converted = md5(uniqid(mt_rand(), true)) . '.pdf';
         save_gs($filename, $converted);
-        $contents = file_get_contents($converted);
+        $contents = file_get_contents('/var/www/moodle/course/' . $converted);
         $file_info = array(
             'contextid' => $file->get_contextid(),
 
@@ -86,8 +87,8 @@ function moodlewatermark_set_mainfile($data)
         );
         $file->delete();
         $newFile = $fs->create_file_from_string($file_info, $contents);
-        $path = '/var/www/moodle/course/';
         unlink($filename);
+        unlink('/var/www/moodle/course/' . $converted);
     }
     if (count($files) == 1) {
         // only one file attached, set it as main file automatically

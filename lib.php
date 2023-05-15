@@ -251,7 +251,7 @@ function moodlewatermark_add_watermark($file, $forcedownload)
         if ($forcedownload) {
             $pdf_editor->Output('D', $filename);
         } else {
-            send_content_uncached($pdf_editor->Output('S'), $filename);
+            send_content_uncached($pdf_editor->Output($file->get_filename()), $filename);
         }
     } catch (Exception $exception) {
         echo get_string('cannotgeneratewatermark', 'mod_moodlewatermark');
@@ -299,8 +299,7 @@ function moodlewatermark_create_watermarkedfile($file, $filepath, $filename)
  */
 function addwatermark($path)
 {
-    global $USER;
-
+    global $USER, $CFG;
     $pdf = new FPDI();
     $pageCount = $pdf->setSourceFile($path);
     $date = new DateTime('now', new DateTimeZone('Europe/Lisbon'));
@@ -317,7 +316,7 @@ function addwatermark($path)
     }
 
     imagefilter($watermark, IMG_FILTER_COLORIZE, 0, 0, 0, 127 * 0.70);
-    $watermarkPath = '/var/www/moodle/course/watermarked' . md5(uniqid(mt_rand(), true)) . '.png';
+    $watermarkPath = $CFG->dirroot . '/mod/moodlewatermark/tmp/watermarked' . md5(uniqid(mt_rand(), true)) . '.png';
     imagepng($watermark, $watermarkPath);
 
     $watermark = imagecreatefrompng($watermarkPath);
@@ -331,7 +330,14 @@ function addwatermark($path)
         $pdf->useTemplate($template);
         $pageWidth = $pdf->GetPageWidth();
         $pageHeight = $pdf->GetPageHeight();
-        $pdf->Image($watermarkPath, $pageWidth / 6, 0, $watermarkWidth, $watermarkHeight);
+        if ($pageWidth > $pageHeight) {
+            $pdf->Rotate(90, $pageWidth / 2, $pageHeight / 2);
+            $pdf->Image($watermarkPath, $pageWidth / 3, 0, $watermarkHeight, $watermarkWidth);
+            $pdf->Rotate(0);
+        } else {
+            $pdf->Image($watermarkPath, $pageWidth / 6, 0, $watermarkWidth, $watermarkHeight);
+        }
+
     }
     $pdf->Output($path, 'F');
     unlink($watermarkPath);
@@ -339,7 +345,7 @@ function addwatermark($path)
     $inputPath = $path;
     $outputPath = $path;
 
-    $command = $gsPath . " -sDEVICE=png16m -o " . $inputPath . "_%03d.png -r200 -dNOPAUSE -dBATCH -dSAFER -dDownScaleFactor=1 " . $inputPath . "  && convert " . $inputPath . "_*.png " . $outputPath . "  && rm " . $inputPath . "_*.png";
+    $command = $gsPath . " -sDEVICE=png16m -o " . $inputPath . "_%03d.png -r200 -dNOPAUSE -dBATCH -dSAFER " . $inputPath . "  && convert " . $inputPath . "_*.png -density 300 -quality 100 " . $outputPath . "  && rm " . $inputPath . "_*.png";
     exec($command, $output, $returnCode);
 
 }

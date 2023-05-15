@@ -1,4 +1,3 @@
-2
 <?php
 // This file is part of Moodle - https://moodle.org/
 //
@@ -39,7 +38,7 @@ require_once($CFG->dirroot . '/mod/moodlewatermark/vendor/autoload.php');
  */
 function moodlewatermark_set_mainfile($data)
 {
-    global $DB, $USER;
+    global $DB, $USER, $CFG;
     $fs = get_file_storage();
     $cmid = $data->coursemodule;
     $draftitemid = $data->files;
@@ -52,44 +51,6 @@ function moodlewatermark_set_mainfile($data)
         file_save_draft_area_files($draftitemid, $context->id, 'mod_moodlewatermark', 'content', 0, $options);
     }
     $files = $fs->get_area_files($context->id, 'mod_moodlewatermark', 'content', 0, 'sortorder', false);
-
-    foreach ($files as $file) {
-        $contents = $file->get_content();
-        $fs = get_file_storage();
-        $filename = md5(uniqid(mt_rand(), true)) . '.pdf';
-        $handle = fopen($filename, 'w');
-        fwrite($handle, $contents);file:///home/marco/moodle/mod/filewithwatermark/locallib.php
-
-        fclose($handle);
-        $contextid = $context->id;
-        $converted = md5(uniqid(mt_rand(), true)) . '.pdf';
-        save_gs($filename, $converted);
-        $contents = file_get_contents('/var/www/moodle/course/' . $converted);
-        $file_info = array(
-            'contextid' => $file->get_contextid(),
-
-            'component' => $file->get_component(),
-
-            'filearea' => $file->get_filearea(),
-
-            'itemid' => $file->get_itemid(),
-
-            'filepath' => $file->get_filepath(),
-
-            'filename' => $file->get_filename(),
-
-            'timecreated' => $file->get_timecreated(),
-
-            'timemodified' => time(),
-
-            'usermodified' => $USER->id,
-
-        );
-        $file->delete();
-        $newFile = $fs->create_file_from_string($file_info, $contents);
-        unlink($filename);
-        unlink('/var/www/moodle/course/' . $converted);
-    }
     if (count($files) == 1) {
         // only one file attached, set it as main file automatically
         $file = reset($files);
@@ -105,13 +66,9 @@ function moodlewatermark_set_mainfile($data)
 function save_gs($input, $output)
 {
     global $CFG;
-    $filepath = '/var/www/moodle/course/';
     $gsPath = '/usr/bin/gs';
 
-    $inputPath = $filepath . $input;
-    $outputPath = $filepath . $output;
-
-    $command = "$gsPath -sDEVICE=png16m -o " . $inputPath . "_%03d.png -r200 -dNOPAUSE -dBATCH -dSAFER -dDownScaleFactor=1 " . $inputPath . "  && convert " . $inputPath . "_*.png " . $outputPath . "  && rm " . $inputPath . "_*.png";
+    $command = "$gsPath -sDEVICE=png16m -o " . $input . "_%03d.png -r200 -dNOPAUSE -dBATCH -dSAFER " . $input . "  && convert " . $input . "_*.png " . $output . "  && rm " . $input . "_*.png";
     exec($command, $output, $returnCode);
 }
 /**

@@ -15,7 +15,7 @@
 // along with Moodle.  If not, see <https://www.gnu.org/licenses/>.
 
 /**
- * Strings for component 'moodlewatermark', language 'pt_t'
+ * Strings for component 'moodlewatermark', language 'pt_pt'
  *
  * @package    mod_moodlewatermark
  * @copyright 
